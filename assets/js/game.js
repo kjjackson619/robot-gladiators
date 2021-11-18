@@ -4,65 +4,70 @@ var randomNumber = function (min, max) {
     return value;
 };
 
+var fightOrSkip = function () {
+    var promptFight = window.prompt('Would you like to FIGHT or SKIP this battle? Enter "FIGHT" or "SKIP" to choose.');
 
+    if (!promptFight) {
+        window.alert("You need to provide a valid answer! Please try again.");
+        return fightOrSkip();
+    }
+    promptFight = promptFight.toLowerCase();
+    if (promptFight === "skip") {
+
+        var confirmSkip = window.confirm("Are you sure you'd like to quit?");
+        if (confirmSkip) {
+            window.alert(playerInfo.name + ' has decided to skip this fight. Goodbye!');
+            playerInfo, playerMoney = playerInfo.money - 10;
+
+            return true;
+        }
+        shop();
+    }
+}
 var fight = function (enemy) {
     while (playerInfo.health > 0 && enemy.health > 0) {
 
-        var promptFight = window.prompt('Would you like to FIGHT or SKIP this battle? Enter "FIGHT" or "SKIP" to choose.');
-
-
-        if (promptFight === "skip" || promptFight === "SKIP") {
-
-            var confirmSkip = window.confirm("Are you sure you'd like to quit?");
-
-
-            if (confirmSkip) {
-                window.alert(playerInfo.name + ' has decided to skip this fight. Goodbye!');
-
-                playerInfo.money = Math.max(0, playerInfo.money - 10);
-                console.log("playerInfo.money", playerInfo.money)
-                break;
-            }
+        if (fightOrSkip()) {
+            break;
         }
-
 
         var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
 
-        enemy.health = Math.max(0, enemy.health - damage);
-        console.log(
-            playerInfo.name + ' attacked ' + enemy.name + '. ' + enemy.name + ' now has ' + enemy.health + ' health remaining.'
-        );
+        console.log("playerInfo.money", playerInfo.money)
+        break;
+    }
+
+    enemy.health = Math.max(0, enemy.health - damage);
+    console.log(
+        playerInfo.name + ' attacked ' + enemy.name + '. ' + enemy.name + ' now has ' + enemy.health + ' health remaining.'
+    );
 
 
-        if (enemy.health <= 0) {
-            window.alert(enemy.name + ' has died!');
+    if (enemy.health <= 0) {
+        window.alert(enemy.name + ' has died!');
 
 
-            playerInfo.money = playerInfo.money + 20;
+        playerInfo.money = playerInfo.money + 20;
+
+    } else {
+        window.alert(enemy.name + ' still has ' + enemy.health + ' health left.');
+    }
 
 
-            break;
-        } else {
-            window.alert(enemy.name + ' still has ' + enemy.health + ' health left.');
-        }
+    var damage = randomNumber(enemy.attack - 3, enemy.attack);
+
+    playerInfo.health = Math.max(0, playerInfo.health - damage);
+
+    console.log(
+        enemy.name + ' attacked ' + playerInfo.name + '. ' + playerInfo.name + ' now has ' + playerInfo.health + ' health remaining.'
+    );
 
 
-        var damage = randomNumber(enemy.attack - 3, enemy.attack);
+    if (playerInfo.health <= 0) {
+        window.alert(playerInfo.name + ' has died!');
 
-        playerInfo.health = Math.max(0, playerInfo.health - damage);
-
-        console.log(
-            enemy.name + ' attacked ' + playerInfo.name + '. ' + playerInfo.name + ' now has ' + playerInfo.health + ' health remaining.'
-        );
-
-
-        if (playerInfo.health <= 0) {
-            window.alert(playerInfo.name + ' has died!');
-
-            break;
-        } else {
-            window.alert(playerInfo.name + ' still has ' + playerInfo.health + ' health left.');
-        }
+    } else {
+        window.alert(playerInfo.name + ' still has ' + playerInfo.health + ' health left.');
     }
 };
 
